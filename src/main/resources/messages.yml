@@ -1,0 +1,19 @@
+# Messages sent to the normal players
+server:
+  # You can remove prefix by setting the prefix to "", if the prefix is not empty or is blank, it will automatically add a space in between the prefix
+  # and the message.
+  prefix: "[EnhancedCommunications]"
+
+  recipient-offline: "The player you are trying to contact is not online!"
+
+  no-messages-to-reply-to: "No one has messaged you!"
+
+  recipient-never-joined-server: "The player you are trying to contact has never joined this server!"
+
+  recipient-discussion-ended: "The person you were messaging (%recipient%) just left the server!"
+
+# Messages sent to the person configurating this
+developer:
+  prefix: "[EnhancedCommunications]"
+
+
