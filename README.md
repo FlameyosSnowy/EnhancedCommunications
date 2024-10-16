@@ -17,7 +17,43 @@ Mentioning system:
 
 ![2024-10-15_17 22 56](https://github.com/user-attachments/assets/d717c47b-91e8-4fa8-b5dc-6d465be1eb2b)
 
-**API Releases soon**
+Messaging system (/message, /reply) with extensive API.
+
+Chat formatting (LuckPerms, Vault, and even no-permissions plugin chat formatting)
+
+Maven:
+
+```xml
+<repositories>
+    <repository>
+        <id>foxikle-flameyos</id>
+        <name>Foxikle's Repository</name>
+        <url>https://repo.foxikle.dev/flameyos</url>
+    </repository>
+</repositories>
+<dependencies>
+    <dependency>
+        <groupId>me.flame.communication</groupId>
+        <artifactId>EnhancedCommunication</artifactId>
+        <version>1.0.0</version>
+    </dependency>
+</dependencies>
+```
+
+Gradle (Kotlin):
+
+```kt
+repositories {
+    mavenCentral()
+    maven("
+"https://repo.foxikle.dev/flameyos")
+
+}
+
+dependencies {
+    implementation("me.flame.communication:EnhancedCommunication:1.0.0")
+}
+```
 
 You can ask for help in my [discord server](https://discord.gg/Zj6KBS7UwX)
 
