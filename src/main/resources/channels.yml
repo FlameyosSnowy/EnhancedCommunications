@@ -1,9 +1,0 @@
-global:
-  color: dark_green
-  chat-color: dark_green
-  default: true
-  alias: g
-  permissions: None
-  speak_permissions: None
-  channel_prefix: "<dark_gray>[<white>Global<dark_gray>]<reset>"
-  format: "<dark_gray>{channel_prefix}{prefix}{player_displayname}<gray>: {message}"
