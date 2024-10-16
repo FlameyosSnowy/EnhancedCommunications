@@ -37,7 +37,7 @@ Maven:
     <dependency>
         <groupId>me.flame.communication</groupId>
         <artifactId>EnhancedCommunication</artifactId>
-        <version>1.0.0</version>
+        <version>1.0.1</version>
     </dependency>
 </dependencies>
 ```
@@ -47,13 +47,12 @@ Gradle (Kotlin):
 ```kt
 repositories {
     mavenCentral()
-    maven("
-"https://repo.foxikle.dev/flameyos")
+    maven("https://repo.foxikle.dev/flameyos")
 
 }
 
 dependencies {
-    implementation("me.flame.communication:EnhancedCommunication:1.0.0")
+    implementation("me.flame.communication:EnhancedCommunication:1.0.1")
 }
 ```
 
