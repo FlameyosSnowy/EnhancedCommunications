@@ -1,6 +1,8 @@
 # EnhancedCommunications
 A next-generation chat plugin for enhancing Minecraft chat.
 
+# ⚠️ DISCLAIMER: ONLY WORKS FOR PAPERMC 1.18+
+
 ## Features:
 **High-performance**: Can process big messages and spam without hassle, chat delay, or TPS drops.
 
