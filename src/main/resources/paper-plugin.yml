@@ -1,0 +1,20 @@
+name: EnhancedCommunications
+version: '1.0.0'
+main: me.flame.communication.EnhancedCommunication
+description: A next-generation chat plugin for enhancing minecraft chat
+api-version: '1.20.6'
+
+dependencies:
+  server:
+    PlaceholderAPI:
+      load: BEFORE
+      required: false
+      join-classpath: true
+    Vault:
+      load: BEFORE
+      required: false
+      join-classpath: true
+    LuckPerms:
+      load: BEFORE
+      required: false
+      join-classpath: true
