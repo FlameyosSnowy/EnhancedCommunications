@@ -28,8 +28,6 @@ public class MentionsManagerImpl implements MentionsManager {
     public Option<GroupedDataRegistry> changeMentionsLook(final Player player, final String message) {
         if (!this.settings.isMentionsEnabled()) return Option.none();
 
-        EnhancedCommunication.LOGGER.info("Mentions enabled.");
-
         ActionsManager actionsManager = EnhancedCommunication.get().getChatManager().getActionsManager();
 
         StringBuilder currentToken = new StringBuilder(8);
@@ -39,7 +37,6 @@ public class MentionsManagerImpl implements MentionsManager {
         for (int index = 0; index < message.length(); index++) {
             char c = message.charAt(index);
             if (Character.isWhitespace(c)) {
-                EnhancedCommunication.LOGGER.info(currentToken.toString());
                 String processedToken = this.processToken(currentToken.toString(), players);
                 newMessage.append(processedToken).append(' ');
                 currentToken.setLength(0);
@@ -48,7 +45,8 @@ public class MentionsManagerImpl implements MentionsManager {
             }
         }
 
-        newMessage.append(this.processToken(currentToken.toString(), players));
+        String processedToken = this.processToken(currentToken.toString(), players);
+        newMessage.append(processedToken);
 
         GroupedDataRegistry mentionedUsers = MessageDataRegistry.fromSet(player, newMessage.toString(), null, players);
 
@@ -75,8 +73,7 @@ public class MentionsManagerImpl implements MentionsManager {
         String username = null;
         if (!symbol.isEmpty() && token.startsWith(symbol)) {
             username = token.substring(1);
-        } else if (USERNAME_PATTERN.matcher(token).matches()) {
-            username = token;
+            if (USERNAME_PATTERN.matcher(token).matches()) username = token;
         }
         return username;
     }
