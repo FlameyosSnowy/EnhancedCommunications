@@ -8,6 +8,7 @@ import me.flame.communication.events.chat.PostChatProcessEvent;
 import me.flame.communication.events.chat.PreChatProcessEvent;
 import me.flame.communication.managers.ChatManager;
 
+import me.flame.communication.utils.ServerHelper;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 
 import org.bukkit.Bukkit;
@@ -20,14 +21,12 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 public class PrimaryChatListener implements Listener {
-    private final EnhancedCommunication plugin;
     private final ChatManager chatManager;
     private final MiniMessage miniMessage;
 
     @Contract(pure = true)
     public PrimaryChatListener(final EnhancedCommunication plugin) {
-        this.plugin = plugin;
-        this.chatManager = this.plugin.getChatManager();
+        this.chatManager = plugin.getChatManager();
         this.miniMessage = MiniMessage.miniMessage();
     }
 
@@ -49,7 +48,7 @@ public class PrimaryChatListener implements Listener {
         this.chatManager.processChat(player, message)
                 .peek((dataRegistry) -> {
                     event.renderer(this.chatManager.getDefaultChatRenderer().createChatRenderer(dataRegistry));
-                    Bukkit.getScheduler().runTaskLater(this.plugin, new PostChatProcess(player, message, dataRegistry), 1);
+                    ServerHelper.runDelayed(new PostChatProcess(player, message, dataRegistry), 1);
                 })
                 .onEmpty(() -> event.setCancelled(true));
     }
