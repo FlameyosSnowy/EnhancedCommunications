@@ -23,12 +23,17 @@ dependencies {
     implementation("net.kyori:adventure-text-minimessage:4.17.0")
 
     implementation("dev.velix:imperat-core:1.0.3")
-    implementation("dev.velix:imperat-bukkit:1.0.3")
+    implementation("dev.velix:imperat-bukkit:1.0.3") {
+        isTransitive = false
+    }
 
     compileOnly("me.clip:placeholderapi:2.11.6")
-    compileOnly("com.github.MilkBowl:VaultAPI:1.7")
+    compileOnly("com.github.MilkBowl:VaultAPI:1.7") {
+        isTransitive = false
+    }
+
     compileOnly("net.luckperms:api:5.4")
-    compileOnly("io.papermc.paper:paper-api:1.21.1-R0.1-SNAPSHOT")
+    compileOnly("dev.folia:folia-api:1.21.1-R0.1-SNAPSHOT")
 }
 
 tasks.shadowJar {
