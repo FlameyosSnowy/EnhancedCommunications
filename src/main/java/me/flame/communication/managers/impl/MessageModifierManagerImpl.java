@@ -15,10 +15,6 @@ import java.util.Queue;
 public class MessageModifierManagerImpl implements Reloadable, MessageModifierManager {
     private final Queue<MessageModifier> modifiers;
 
-    private static final Comparator<MessageModifier> MESSAGE_MODIFIER_COMPARATOR =
-            Comparator.comparing(MessageModifier::getPriority)
-                      .reversed();
-
     public MessageModifierManagerImpl() {
         this.modifiers = new PriorityQueue<>(MESSAGE_MODIFIER_COMPARATOR);
         this.initializeDefaultModifiers();
