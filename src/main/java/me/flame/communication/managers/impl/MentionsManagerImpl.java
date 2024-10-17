@@ -1,6 +1,5 @@
 package me.flame.communication.managers.impl;
 
-import com.google.common.collect.Iterators;
 import me.flame.communication.EnhancedCommunication;
 import me.flame.communication.data.GroupedDataRegistry;
 
@@ -12,11 +11,11 @@ import me.flame.communication.settings.PrimarySettings;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import panda.std.Option;
 
 import java.util.HashSet;
 import java.util.Set;
-import java.util.UUID;
 import java.util.regex.Pattern;
 
 public class MentionsManagerImpl implements MentionsManager {
@@ -69,13 +68,18 @@ public class MentionsManagerImpl implements MentionsManager {
         }
     }
 
+    @Nullable
     private static String resolvePlayerUsername(final @NotNull String token, @NotNull final String symbol) {
-        String username = null;
-        if (!symbol.isEmpty() && token.startsWith(symbol)) {
-            username = token.substring(1);
-            if (USERNAME_PATTERN.matcher(token).matches()) username = token;
+        String username;
+
+        if (!symbol.isEmpty()) {
+            if (token.startsWith(symbol)) username = token.substring(1);
+            else return null;
+        } else {
+            username = token;
         }
-        return username;
+
+        return USERNAME_PATTERN.matcher(username).matches() ? username : null;
     }
 
     public String changeMentionLook(@NotNull final String username, @NotNull String symbol) {
