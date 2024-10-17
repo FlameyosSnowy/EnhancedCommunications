@@ -6,13 +6,15 @@ A next-generation chat plugin for enhancing Minecraft chat.
 ## Features:
 **High-performance**: Can process big messages and spam without hassle, chat delay, or TPS drops.
 
-**Versatile API**: The API is very versatile where you can do anything from creating new actions to creating your managers for the plugin.
+**Versatile API**: The API is very versatile. You can do anything from creating new actions to creating your managers for the plugin.
 
 **Customizable**: Customize everything in this plugin for your server however you like!
 
 **PlaceholderAPI**: This plugin supports PlaceholderAPI for practically everything, from actions to chat formatting, etc!
 
 **MiniMessage**: EnhancedCommunications specializes over other plugins by staying on the modern side, so we use MiniMessage as our primary way to color messages and give them actions!
+
+**Folia support**: This plugin fully supports Folia.
 
 ## Honorable Mentions:
 Mentioning system:
