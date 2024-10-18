@@ -33,7 +33,8 @@ public class MentionsManagerImpl implements MentionsManager {
         StringBuilder newMessage = new StringBuilder(message.length());
         Set<Player> players = new HashSet<>();
 
-        for (int index = 0; index < message.length(); index++) {
+        int length = message.length();
+        for (int index = 0; index < length; index++) {
             char c = message.charAt(index);
             if (Character.isWhitespace(c)) {
                 String processedToken = this.processToken(currentToken.toString(), players);
