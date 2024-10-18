@@ -71,16 +71,22 @@ public class MentionsManagerImpl implements MentionsManager {
 
     @Nullable
     private static String resolvePlayerUsername(final @NotNull String token, @NotNull final String symbol) {
-        String username;
+        String username = parseUsername(token, symbol);
+        if (username == null) return null;
 
+        return USERNAME_PATTERN.matcher(username).matches() ? username : null;
+    }
+
+    @Nullable
+    private static String parseUsername(final @NotNull String token, final @NotNull String symbol) {
+        String username;
         if (!symbol.isEmpty()) {
             if (token.startsWith(symbol)) username = token.substring(1);
             else return null;
         } else {
             username = token;
         }
-
-        return USERNAME_PATTERN.matcher(username).matches() ? username : null;
+        return username;
     }
 
     public String changeMentionLook(@NotNull final String username, @NotNull String symbol) {
