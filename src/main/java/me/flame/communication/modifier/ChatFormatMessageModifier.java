@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 public class ChatFormatMessageModifier implements MessageModifier {
     @Override
     public ModifierPriority getPriority() {
-        return ModifierPriority.HIGHEST;
+        return ModifierPriority.HIGH;
     }
 
     @Override
