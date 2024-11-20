@@ -133,4 +133,8 @@ public class PrimarySettings implements Reloadable {
     public boolean isChatFormatPlaceholderApiEnabled() {
         return this.get("chat-format.placeholderapi");
     }
+
+    public List<String> getWordReplacements() {
+        return this.getStringList("word-replacements");
+    }
 }
