@@ -6,9 +6,9 @@ import me.flame.communication.managers.MessageModifierManager;
 import me.flame.communication.modifier.ChatFormatMessageModifier;
 import me.flame.communication.modifier.MentionInsertionMessageModifier;
 import me.flame.communication.modifier.MessageModifier;
+import me.flame.communication.modifier.WordReplacementMessageModifier;
 import me.flame.communication.utils.Reloadable;
 
-import java.util.Comparator;
 import java.util.PriorityQueue;
 import java.util.Queue;
 
@@ -23,6 +23,10 @@ public class MessageModifierManagerImpl implements Reloadable, MessageModifierMa
     private void initializeDefaultModifiers() {
         if (EnhancedCommunication.get().getPrimaryConfig().isMentionsEnabled()) {
             this.addModifier(new MentionInsertionMessageModifier());
+        }
+
+        if (!EnhancedCommunication.get().getPrimaryConfig().getWordReplacements().isEmpty()) {
+            this.addModifier(new WordReplacementMessageModifier());
         }
 
         if (!EnhancedCommunication.get().getPrimaryConfig().getGroupFormat().isEmpty()) {
