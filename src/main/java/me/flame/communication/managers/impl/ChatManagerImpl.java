@@ -24,6 +24,8 @@ public class ChatManagerImpl implements Reloadable, ChatManager {
     private ChatCooldownManager cooldownManager;
     private MessageModifierManager messageModifierManager;
     private ChatFormatManager chatFormatManager;
+    private WordReplacementManager wordReplacementManager;
+    private AutoBroadcastManager autoBroadcastManager;
 
     private ProcessedChatRenderer processedChatRenderer = DefaultChatRenderer::new;
 
@@ -40,6 +42,11 @@ public class ChatManagerImpl implements Reloadable, ChatManager {
 
         LOGGER.info("Registering actions manager.");
         this.actionsManager = new ActionsManagerImpl();
+
+        LOGGER.info("Registering actions manager.");
+        this.autoBroadcastManager = new AutoBroadcastManagerImpl();
+
+        this.wordReplacementManager = new WordReplacementManagerImpl();
 
         LOGGER.info("Registering chat format manager.");
         this.chatFormatManager = new ChatFormatManagerImpl();
@@ -96,6 +103,12 @@ public class ChatManagerImpl implements Reloadable, ChatManager {
 
     @NotNull
     @Override
+    public AutoBroadcastManager getAutoBroadcastManager() {
+        return autoBroadcastManager;
+    }
+
+    @NotNull
+    @Override
     public ProcessedChatRenderer getDefaultChatRenderer() {
         return processedChatRenderer;
     }
@@ -137,9 +150,27 @@ public class ChatManagerImpl implements Reloadable, ChatManager {
     }
 
     @Override
+    public void setAutoBroadcastManager(final AutoBroadcastManager autoBroadcastManager) {
+        this.autoBroadcastManager = autoBroadcastManager;
+    }
+
+    @NotNull
+    @Override
+    public WordReplacementManager getWordReplacementManager() {
+        return wordReplacementManager;
+    }
+
+    @Override
+    public void setWordReplacementManager(final WordReplacementManager wordReplacementManager) {
+        this.wordReplacementManager = wordReplacementManager;
+    }
+
+    @Override
     public void reload() {
         this.cooldownManager.reload();
         this.chatFormatManager.reload();
         this.messageModifierManager.reload();
+        this.wordReplacementManager.reload();
+        this.autoBroadcastManager.reload();
     }
 }
