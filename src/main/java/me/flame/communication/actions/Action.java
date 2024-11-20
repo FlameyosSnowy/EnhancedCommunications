@@ -13,5 +13,10 @@ public interface Action {
      */
     int expectedArgs();
 
+    /**
+     * Executes the action with the given player. This method is called by actions manager
+     * when processing the list of actions.
+     * @param involvedPlayer the player involved in the action
+     */
     void execute(Player involvedPlayer);
 }
