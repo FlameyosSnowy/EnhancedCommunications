@@ -2,17 +2,18 @@ package me.flame.communication.commands;
 
 import dev.velix.imperat.BukkitSource;
 import dev.velix.imperat.annotations.*;
-import me.flame.communication.EnhancedCommunication;
+
 import me.flame.communication.managers.ConversationManager;
-import me.flame.communication.managers.impl.ConversationManagerImpl;
 import me.flame.communication.managers.ReplySuccess;
 import me.flame.communication.settings.MessagesSettings;
-import me.flame.communication.settings.PrimarySettings;
+
 import net.kyori.adventure.text.minimessage.MiniMessage;
-import org.bukkit.entity.Player;
+
 import org.jetbrains.annotations.NotNull;
 
 @Command(value = { "reply", "r" })
+@Permission("enchancedcommunications.user.reply")
+@Description("Reply to someone you were talking to!")
 public class ReplyCommand {
     @Dependency
     private ConversationManager conversationManager;
