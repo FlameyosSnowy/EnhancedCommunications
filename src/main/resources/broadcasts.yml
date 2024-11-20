@@ -1,0 +1,28 @@
+# Here is an example of broadcasts and it must be something like this.
+# You can delete this if you don't want it.
+# Supports minimessage AND PlaceholderAPI
+
+# Name of the broadcast, this does not matter and it's irrelevant.
+# website:
+#  This can be from: GLOBAL means it broadcasts to all worlds.
+#  if you want it to go to 1 world, name the world, and if it's more than 1, separate them using :
+#  in-world: "world:world_the_end"
+#
+#  In seconds
+#  inverval: 60
+#
+#  You can use <center>Hello world to center the line like this:
+#  "         Hello world          "
+#  "How are you"
+#  "      I am fine thank you     "
+#  lore:
+#    - ""
+#    - ""
+
+website:
+  in-world: "world:world_the_end"
+  interval: 60
+  lore:
+    - "<center>Hello world"
+    - "How are you"
+    - "<center>I am fine thank you"
