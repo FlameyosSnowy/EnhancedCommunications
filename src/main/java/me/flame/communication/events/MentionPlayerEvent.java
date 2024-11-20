@@ -21,10 +21,20 @@ public class MentionPlayerEvent extends Event {
         this.mentioned = mentioned;
     }
 
+    /**
+     * Get the player who got mentioned.
+     *
+     * @return the player who got mentioned
+     */
     public Player getMentioned() {
         return mentioned;
     }
 
+    /**
+     * Get the player who mentions someone.
+     *
+     * @return the player who mentions someone
+     */
     public Player getMentioner() {
         return mentioner;
     }

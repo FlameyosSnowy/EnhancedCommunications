@@ -9,6 +9,7 @@ import me.flame.communication.messages.Message;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 import panda.std.Option;
 
 import java.util.*;
@@ -18,7 +19,7 @@ public class ConversationManagerImpl implements ConversationManager {
     private final MiniMessage miniMessage = MiniMessage.miniMessage();
 
     @Override
-    public void sendMessage(Message message) {
+    public void sendMessage(@NotNull Message message) {
         if (!lastMessageMap.containsKey(message.recipient())) {
             Bukkit.getPluginManager().callEvent(new ConversationStartEvent(message));
         }

@@ -5,6 +5,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 
+@SuppressWarnings("unused")
 public class ConversationReplyEvent extends Event {
     private static final HandlerList HANDLER_LIST = new HandlerList();
 
@@ -14,6 +15,11 @@ public class ConversationReplyEvent extends Event {
         this.messageData = messageData;
     }
 
+    /**
+     * Get the message data which is being replied to.
+     *
+     * @return The message data which is being replied to.
+     */
     public Message getMessageData() {
         return messageData;
     }
