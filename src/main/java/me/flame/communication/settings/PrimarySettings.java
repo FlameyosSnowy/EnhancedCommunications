@@ -137,4 +137,8 @@ public class PrimarySettings implements Reloadable {
     public List<String> getWordReplacements() {
         return this.getStringList("word-replacements");
     }
+
+    public boolean isAutoBroadcastsEnabled() {
+        return this.get("enable-broadcasts");
+    }
 }

@@ -29,6 +29,8 @@ public class AutoBroadcastManagerImpl implements AutoBroadcastManager {
 
     private final Map<String, BroadcastTask> broadcasts = new HashMap<>(5);
 
+    private boolean enabled;
+
     public AutoBroadcastManagerImpl() {
         try {
             this.config = YamlDocument.create(
@@ -41,7 +43,8 @@ public class AutoBroadcastManagerImpl implements AutoBroadcastManager {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        this.addBroadcasts();
+        this.enabled = EnhancedCommunication.get().getPrimaryConfig().isAutoBroadcastsEnabled();
+        if (this.enabled) this.addBroadcasts();
     }
 
     @Override
@@ -83,8 +86,29 @@ public class AutoBroadcastManagerImpl implements AutoBroadcastManager {
 
     @Override
     public void reload() {
+        try {
+            this.config.reload();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        boolean wasEnabled = this.enabled;
+        this.enabled = EnhancedCommunication.get().getPrimaryConfig().isAutoBroadcastsEnabled();
+        this.reloadBroadcasts(wasEnabled);
+    }
+
+    private void reloadBroadcasts(final boolean wasEnabled) {
+        if (this.enabled) {
+            this.unloadBroadcasts();
+            this.addBroadcasts();
+        } else if (wasEnabled) {
+            this.unloadBroadcasts();
+        }
+    }
+
+    private void unloadBroadcasts() {
+        this.broadcasts.values().forEach(BroadcastTask::cancel);
         this.broadcasts.clear();
-        this.addBroadcasts();
     }
 
     private void addBroadcasts() {
