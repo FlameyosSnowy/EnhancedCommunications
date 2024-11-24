@@ -13,7 +13,7 @@ public class WordReplacementManagerImpl implements WordReplacementManager {
 
     public WordReplacementManagerImpl() {
         this.wordsToReplace = new HashMap<>();
-        this.reload();
+        this.loadWordMappersFromConfig();
     }
 
     @Override
@@ -29,9 +29,27 @@ public class WordReplacementManagerImpl implements WordReplacementManager {
     }
 
     @Override
-    public void reload() {
-        if (!wordsToReplace.isEmpty()) wordsToReplace.clear();
+    public void addWordMapper(final String key, final String value) {
+        this.wordsToReplace.put(key, value);
+    }
 
+    @Override
+    public void removeWordMapper(final String key) {
+        this.wordsToReplace.remove(key);
+    }
+
+    @Override
+    public void clearWordMappers() {
+        this.wordsToReplace.clear();
+    }
+
+    @Override
+    public void reload() {
+        this.clearWordMappers();
+        this.loadWordMappersFromConfig();
+    }
+
+    private void loadWordMappersFromConfig() {
         List<String> mappers = EnhancedCommunication.get().getPrimaryConfig().getWordReplacements();
         if (mappers.isEmpty()) return;
 
