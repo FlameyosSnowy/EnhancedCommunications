@@ -4,12 +4,13 @@ import me.clip.placeholderapi.PlaceholderAPI;
 import me.flame.communication.EnhancedCommunication;
 import me.flame.communication.actions.Action;
 import me.flame.communication.data.MessageDataRegistry;
+import me.flame.communication.events.actions.PreActionBarExecuteEvent;
 import me.flame.communication.managers.ChatCooldownManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-public record ActionBarAction(MessageDataRegistry dataRegistry) implements Action {
+public record ActionBarAction(MessageDataRegistry<String> dataRegistry) implements Action {
     @Override
     public int expectedArgs() {
         return 1;
@@ -17,9 +18,16 @@ public record ActionBarAction(MessageDataRegistry dataRegistry) implements Actio
 
     @Override
     public void execute(Player involvedPlayer) {
+        PreActionBarExecuteEvent event = new PreActionBarExecuteEvent(!Bukkit.isPrimaryThread(), this, this.dataRegistry);
+        Bukkit.getPluginManager().callEvent(event);
+
+        if (event.isCancelled()) {
+            return;
+        }
+
         ChatCooldownManager chatCooldownManager = EnhancedCommunication.get().getChatManager().getCooldownManager();
 
-        final String formattedMessage = this.checkPlaceholders(this.dataRegistry.getMessage()
+        final String formattedMessage = this.checkPlaceholders(this.dataRegistry.getData()
                 .replace("%player%", MINI_MESSAGE.serialize(this.dataRegistry.getPlayer().displayName()))
                 .replace("%remaining-cooldown%", String.valueOf(chatCooldownManager.getCooldownRemainder(involvedPlayer)))
                 .replace("%total-cooldown%", String.valueOf(EnhancedCommunication.get().getPrimaryConfig().getChatCooldown())));

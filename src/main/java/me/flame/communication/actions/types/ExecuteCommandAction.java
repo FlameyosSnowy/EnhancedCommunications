@@ -1,12 +1,12 @@
 package me.flame.communication.actions.types;
 
 import me.flame.communication.actions.Action;
-import me.flame.communication.data.GroupedDataRegistry;
 import me.flame.communication.data.MessageDataRegistry;
+import me.flame.communication.events.actions.PreExecuteCommandEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-public record ExecuteCommandAction(MessageDataRegistry dataRegistry) implements Action {
+public record ExecuteCommandAction(MessageDataRegistry<String> dataRegistry) implements Action {
 
     @Override
     public int expectedArgs() {
@@ -15,11 +15,17 @@ public record ExecuteCommandAction(MessageDataRegistry dataRegistry) implements 
 
     @Override
     public void execute(final Player involvedPlayer) {
-        boolean executeAsConsole = dataRegistry.getRegistration("console");
-        if (executeAsConsole) {
-            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), dataRegistry.getMessage());
+        PreExecuteCommandEvent event = new PreExecuteCommandEvent(!Bukkit.isPrimaryThread(), this, dataRegistry);
+        Bukkit.getPluginManager().callEvent(event);
+        if (event.isCancelled()) {
             return;
         }
-        Bukkit.dispatchCommand(involvedPlayer, dataRegistry.getMessage());
+
+        boolean executeAsConsole = dataRegistry.getRegistration("console");
+        if (executeAsConsole) {
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), dataRegistry.getData());
+            return;
+        }
+        Bukkit.dispatchCommand(involvedPlayer, dataRegistry.getData());
     }
 }
