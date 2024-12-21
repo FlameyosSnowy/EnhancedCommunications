@@ -1,5 +1,6 @@
 package me.flame.communication.managers;
 
+import me.flame.communication.messages.SerializedMessage;
 import me.flame.communication.utils.Reloadable;
 import org.bukkit.entity.Player;
 
@@ -15,5 +16,5 @@ public interface ChatFormatManager extends Reloadable {
      * @param player the player whose chat format is being applied
      * @return the formatted chat message as a String
      */
-    String getFormat(String message, Player player);
+    SerializedMessage getFormat(SerializedMessage message, Player player);
 }

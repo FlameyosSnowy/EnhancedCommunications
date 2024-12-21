@@ -1,6 +1,6 @@
 package me.flame.communication.managers;
 
-import me.flame.communication.data.RawDataRegistry;
+import me.flame.communication.messages.SerializedMessage;
 import me.flame.communication.modifier.MessageModifier;
 import me.flame.communication.utils.Reloadable;
 
@@ -30,5 +30,5 @@ public interface MessageModifierManager extends Reloadable {
      *
      * @param dataRegistry The data registry to modify.
      */
-    void editMessage(RawDataRegistry dataRegistry);
+    void editMessage(SerializedMessage dataRegistry);
 }

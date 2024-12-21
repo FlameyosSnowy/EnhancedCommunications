@@ -2,6 +2,7 @@ package me.flame.communication.providers;
 
 import me.flame.communication.EnhancedCommunication;
 
+import me.flame.communication.messages.SerializedMessage;
 import net.luckperms.api.LuckPerms;
 
 import net.milkbowl.vault.chat.Chat;
@@ -30,7 +31,7 @@ public interface ChatProvider {
      * @param player the player that sent the message
      * @return the formatted message
      */
-    String getFormat(String message, String groupFormat, Player player);
+    SerializedMessage getFormat(SerializedMessage message, String groupFormat, Player player);
 
     /**
      * Gets the chosen chat provider that is set in the configuration file.

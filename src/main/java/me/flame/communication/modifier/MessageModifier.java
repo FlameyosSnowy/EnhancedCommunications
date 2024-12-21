@@ -1,6 +1,7 @@
 package me.flame.communication.modifier;
 
 import me.flame.communication.data.RawDataRegistry;
+import me.flame.communication.messages.SerializedMessage;
 
 public interface MessageModifier {
     /**
@@ -12,9 +13,6 @@ public interface MessageModifier {
 
     /**
      * Modify the message of the given {@link RawDataRegistry}.
-     *
-     * @param dataRegistry the data registry
-     * @return the modified message
      */
-    String modify(RawDataRegistry dataRegistry);
+    void modify(SerializedMessage data);
 }

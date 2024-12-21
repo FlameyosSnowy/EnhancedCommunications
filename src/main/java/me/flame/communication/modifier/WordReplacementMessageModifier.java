@@ -1,7 +1,7 @@
 package me.flame.communication.modifier;
 
 import me.flame.communication.EnhancedCommunication;
-import me.flame.communication.data.RawDataRegistry;
+import me.flame.communication.messages.SerializedMessage;
 
 public class WordReplacementMessageModifier implements MessageModifier {
     @Override
@@ -10,8 +10,7 @@ public class WordReplacementMessageModifier implements MessageModifier {
     }
 
     @Override
-    public String modify(final RawDataRegistry dataRegistry) {
-        String message = dataRegistry.getMessage();
-        return EnhancedCommunication.get().getChatManager().getWordReplacementManager().replaceWords(message);
+    public void modify(final SerializedMessage message) {
+        EnhancedCommunication.get().getChatManager().getWordReplacementManager().replaceWords(message);
     }
 }

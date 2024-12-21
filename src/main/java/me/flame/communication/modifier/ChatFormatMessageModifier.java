@@ -2,7 +2,8 @@ package me.flame.communication.modifier;
 
 import me.clip.placeholderapi.PlaceholderAPI;
 import me.flame.communication.EnhancedCommunication;
-import me.flame.communication.data.RawDataRegistry;
+
+import me.flame.communication.messages.SerializedMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -10,24 +11,27 @@ import org.jetbrains.annotations.NotNull;
 public class ChatFormatMessageModifier implements MessageModifier {
     @Override
     public ModifierPriority getPriority() {
-        return ModifierPriority.HIGH;
+        return ModifierPriority.LOWEST;
     }
 
     @Override
-    public String modify(final @NotNull RawDataRegistry dataRegistry) {
-        Player player = dataRegistry.getPlayer();
-        return checkPlaceholders(EnhancedCommunication.get()
+    public void modify(final @NotNull SerializedMessage data) {
+        Player player = data.getSender();
+        SerializedMessage newMessage = EnhancedCommunication.get()
                 .getChatManager()
                 .getChatFormatManager()
-                .getFormat(dataRegistry.getMessage(), player), player);
+                .getFormat(data, player);
+        if (newMessage.isEmpty()) return;
+
+        checkPlaceholders(newMessage, player);
     }
 
-    private static String checkPlaceholders(String message, Player player) {
+    private static void checkPlaceholders(SerializedMessage data, Player player) {
         if (!EnhancedCommunication.get().getPrimaryConfig().isChatFormatPlaceholderApiEnabled() ||
                 !Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
-            return message;
+            return;
         }
 
-        return PlaceholderAPI.setPlaceholders(player, message);
+        data.setMessage(PlaceholderAPI.setPlaceholders(player, data.getMessage()));
     }
 }

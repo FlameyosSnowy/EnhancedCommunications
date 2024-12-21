@@ -1,16 +1,17 @@
 package me.flame.communication.managers;
 
+import me.flame.communication.messages.SerializedMessage;
 import me.flame.communication.utils.Reloadable;
 
+@SuppressWarnings("unused")
 public interface WordReplacementManager extends Reloadable {
     /**
      * Replaces words in the given message based on the word replacements defined
      * in the primary configuration.
      *
      * @param message the message to replace words in
-     * @return the message with all words replaced
      */
-    String replaceWords(String message);
+    void replaceWords(SerializedMessage message);
 
     /**
      * Adds a new word mapper to the word replacement configuration.

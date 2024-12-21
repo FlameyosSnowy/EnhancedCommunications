@@ -1,8 +1,9 @@
 package me.flame.communication.managers.impl;
 
 import me.flame.communication.EnhancedCommunication;
-import me.flame.communication.data.RawDataRegistry;
+
 import me.flame.communication.managers.MessageModifierManager;
+import me.flame.communication.messages.SerializedMessage;
 import me.flame.communication.modifier.ChatFormatMessageModifier;
 import me.flame.communication.modifier.MentionInsertionMessageModifier;
 import me.flame.communication.modifier.MessageModifier;
@@ -43,12 +44,9 @@ public class MessageModifierManagerImpl implements Reloadable, MessageModifierMa
         this.modifiers.remove(modifier);
     }
 
-    public void editMessage(RawDataRegistry dataRegistry) {
+    public void editMessage(SerializedMessage data) {
         for (MessageModifier modifier : modifiers) {
-            String newMessage = modifier.modify(dataRegistry);
-            if (newMessage.isEmpty()) continue;
-
-            dataRegistry.setMessage(newMessage);
+            modifier.modify(data);
         }
     }
 

@@ -2,6 +2,7 @@ package me.flame.communication.managers.impl;
 
 import me.flame.communication.EnhancedCommunication;
 import me.flame.communication.managers.WordReplacementManager;
+import me.flame.communication.messages.SerializedMessage;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -17,15 +18,12 @@ public class WordReplacementManagerImpl implements WordReplacementManager {
     }
 
     @Override
-    public String replaceWords(final String message) {
-        if (wordsToReplace.isEmpty()) return message;
+    public void replaceWords(final SerializedMessage data) {
+        if (wordsToReplace.isEmpty()) return;
 
-        String newMessage = message;
         for (Map.Entry<String, String> mappers : this.wordsToReplace.entrySet()) {
-            newMessage = newMessage.replace(mappers.getKey(), mappers.getValue());
+            data.setMessage(data.getMessage().replace(mappers.getKey(), mappers.getValue()));
         }
-
-        return newMessage;
     }
 
     @Override

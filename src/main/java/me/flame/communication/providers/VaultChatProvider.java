@@ -1,5 +1,6 @@
 package me.flame.communication.providers;
 
+import me.flame.communication.messages.SerializedMessage;
 import me.flame.communication.providers.data.GroupChatMetaData;
 import me.flame.communication.providers.data.ChatMetaData;
 import net.milkbowl.vault.chat.Chat;
@@ -9,7 +10,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
-import static me.flame.communication.providers.EmptyChatProvider.EMPTY;
+import static me.flame.communication.actions.Action.MINI_MESSAGE;
 
 public class VaultChatProvider implements ChatProvider {
     private final Chat chatProvider;
@@ -19,13 +20,21 @@ public class VaultChatProvider implements ChatProvider {
     }
 
     @Override
-    public String getFormat(String message, @NotNull String groupFormat, @NotNull Player player) {
-        final ChatMetaData metaData = getMetaData(player, player.getWorld());
-        return EMPTY.getFormat(message, groupFormat, player)
+    public SerializedMessage getFormat(SerializedMessage message, @NotNull String groupFormat, @NotNull Player player) {
+        World world = player.getWorld();
+        final ChatMetaData metaData = getMetaData(player, world);
+
+        message.setRawFormat(groupFormat);
+        message.setSerializedFormat(groupFormat
+                .replace("{world}", world.getName())
+                .replace("{name}", player.getName())
+                .replace("{message}", message.getMessage())
+                .replace("{displayname}", MINI_MESSAGE.serialize(player.displayName()))
                 .replace("{prefix}", metaData.prefix() != null ? metaData.prefix() : "")
                 .replace("{suffix}", metaData.suffix() != null ? metaData.suffix() : "")
                 .replace("{prefixes}", metaData.group().prefixes())
-                .replace("{suffixes}", metaData.group().suffixes());
+                .replace("{suffixes}", metaData.group().suffixes()));
+        return message;
     }
 
     @Contract("_, _ -> new")
