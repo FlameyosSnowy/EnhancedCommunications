@@ -1,20 +1,12 @@
 package me.flame.communication.managers.impl;
 
 import me.flame.communication.EnhancedCommunication;
-import me.flame.communication.data.MessageDataRegistry;
-import me.flame.communication.data.RawDataRegistry;
 import me.flame.communication.managers.*;
 import me.flame.communication.renderers.DefaultChatRenderer;
 import me.flame.communication.renderers.ProcessedChatRenderer;
 import me.flame.communication.utils.Reloadable;
 
-import org.bukkit.entity.Player;
-
 import org.jetbrains.annotations.NotNull;
-
-import panda.std.Option;
-
-import java.time.Instant;
 
 import static me.flame.communication.EnhancedCommunication.LOGGER;
 
@@ -29,11 +21,7 @@ public class ChatManagerImpl implements Reloadable, ChatManager {
 
     private ProcessedChatRenderer processedChatRenderer = DefaultChatRenderer::new;
 
-    private final EnhancedCommunication plugin;
-
     public ChatManagerImpl(@NotNull final EnhancedCommunication communication) {
-        this.plugin = communication;
-
         LOGGER.info("Registering mentions manager.");
         this.mentionsManager = new MentionsManagerImpl();
         if (!communication.getPrimaryConfig().isMentionsEnabled()) {
@@ -60,28 +48,6 @@ public class ChatManagerImpl implements Reloadable, ChatManager {
         if (!communication.getPrimaryConfig().isChatCooldownsEnabled()) {
             LOGGER.info("Chat cooldowns are not enabled.");
         }
-    }
-
-    public @NotNull Option<RawDataRegistry> processChat(Player player, String message) {
-        if (this.containsBlockedBehaviors(player)) return Option.none();
-
-        RawDataRegistry dataRegistry = MessageDataRegistry.createRaw(player, message);
-
-        this.messageModifierManager.editMessage(dataRegistry);
-        this.insertCooldownIfAllowed(player);
-
-        return Option.of(dataRegistry);
-    }
-
-    private boolean containsBlockedBehaviors(final Player player) {
-        if (!this.cooldownManager.hasCooldown(player)) return false;
-        this.actionsManager.executeChatCooldownActions(player);
-        return true;
-    }
-
-    private void insertCooldownIfAllowed(final Player player) {
-        if (!this.cooldownManager.isChatCooldownsEnabled()) return;
-        this.cooldownManager.insertCooldown(player, Instant.now().plusSeconds(this.plugin.getPrimaryConfig().getChatCooldown()));
     }
 
     public @NotNull MentionsManager getMentionsManager() {
