@@ -5,6 +5,8 @@ import me.flame.communication.actions.types.*;
 
 import me.flame.communication.data.GroupedDataRegistry;
 import me.flame.communication.data.MessageDataRegistry;
+import me.flame.communication.messages.SerializedMessage;
+import me.flame.communication.utils.SoundData;
 import net.kyori.adventure.title.Title;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -39,16 +41,7 @@ public interface ActionsManager {
      *
      * @param dataRegistry the data registry to be used for the actions
      */
-    void executeMentionActions(GroupedDataRegistry dataRegistry);
-
-    /**
-     * Executes the actions registered for the chat cooldown event,
-     * with the given {@link GroupedDataRegistry} as the data registry.
-     *
-     * @param dataRegistry the data registry to be used for the actions
-     */
-    @SuppressWarnings("unused")
-    void executeChatCooldownActions(GroupedDataRegistry dataRegistry);
+    void executeMentionActions(GroupedDataRegistry<SerializedMessage> dataRegistry);
 
     /**
      * Parses the given list of configured actions with the given {@link Player}
@@ -66,7 +59,7 @@ public interface ActionsManager {
      * @param configuredActions the list of configured actions to be parsed
      * @param dataRegistry the data registry to be used for the actions
      */
-    void parseActions(@NotNull List<String> configuredActions, GroupedDataRegistry dataRegistry);
+    void parseActions(@NotNull List<String> configuredActions, GroupedDataRegistry<?> dataRegistry);
 
     /**
      * Creates a new {@link SoundAction} from the given {@link String}
@@ -87,7 +80,7 @@ public interface ActionsManager {
     @Contract("_, _ -> new")
     @NotNull
     static SoundAction createSoundAction(@NotNull final String[] steps, final Player ignoredPlayer) {
-        return new SoundAction(Sound.valueOf(steps[1]), Float.parseFloat(steps[2]), Float.parseFloat(steps[3]));
+        return new SoundAction(MessageDataRegistry.create(ignoredPlayer, new SoundData(Sound.valueOf(steps[1]), Float.parseFloat(steps[2]), Float.parseFloat(steps[3])), steps));
     }
 
     /**
@@ -130,7 +123,7 @@ public interface ActionsManager {
     @Contract("_, _ -> new")
     @NotNull
     static SendMessageAction createSendMessageAction(@NotNull final String[] steps, final Player ignoredPlayer) {
-        return new SendMessageAction(steps[1]);
+        return new SendMessageAction(MessageDataRegistry.create(ignoredPlayer, MINI_MESSAGE.deserialize(steps[1]), steps));
     }
 
     /**
@@ -154,15 +147,17 @@ public interface ActionsManager {
     @Contract("_, _ -> new")
     @NotNull
     static TitleAction createTitleAction(@NotNull final String[] steps, final @NotNull Player player) {
-        return new TitleAction(Title.title(
-                MINI_MESSAGE.deserialize(steps[1].replace("%player%", MINI_MESSAGE.serialize(player.displayName()))),
-                MINI_MESSAGE.deserialize(steps[2].replace("%player%", MINI_MESSAGE.serialize(player.displayName()))),
+        String displayName = MINI_MESSAGE.serialize(player.displayName());
+        MessageDataRegistry<Title> registry = MessageDataRegistry.create(player, Title.title(
+                MINI_MESSAGE.deserialize(steps[1].replace("%player%", displayName)),
+                MINI_MESSAGE.deserialize(steps[2].replace("%player%", displayName)),
                 Title.Times.times(
                         Duration.ofMillis(Long.parseLong(steps[3])),
                         Duration.ofMillis(Long.parseLong(steps[4])),
                         Duration.ofMillis(Long.parseLong(steps[5]))
                 )
-        ));
+        ), steps);
+        return new TitleAction(registry);
     }
 
     @NotNull

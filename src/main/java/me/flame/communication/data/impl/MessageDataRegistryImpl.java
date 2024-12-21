@@ -5,11 +5,11 @@ import org.bukkit.entity.Player;
 
 import java.util.Arrays;
 
-public class MessageDataRegistryImpl extends RawDataRegistryImpl implements MessageDataRegistry, AutoCloseable {
+public class MessageDataRegistryImpl<D> extends RawDataRegistryImpl<D> implements MessageDataRegistry<D>, AutoCloseable {
     private final String[] words;
 
     public MessageDataRegistryImpl(final Player player,
-                                   final String message,
+                                   final D message,
                                    final String[] words) {
         super(player, message);
         this.words = words;
@@ -22,5 +22,6 @@ public class MessageDataRegistryImpl extends RawDataRegistryImpl implements Mess
     @Override
     public void close() throws Exception {
         Arrays.fill(words, null);
+        this.setData(null);
     }
 }

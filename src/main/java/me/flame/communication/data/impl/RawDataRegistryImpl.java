@@ -3,11 +3,11 @@ package me.flame.communication.data.impl;
 import me.flame.communication.data.RawDataRegistry;
 import org.bukkit.entity.Player;
 
-public class RawDataRegistryImpl extends DataRegistryImpl implements RawDataRegistry {
+public class RawDataRegistryImpl<D> extends DataRegistryImpl implements RawDataRegistry<D> {
     private final Player player;
-    private String message;
+    private D message;
 
-    public RawDataRegistryImpl(final Player player, final String message) {
+    public RawDataRegistryImpl(final Player player, final D message) {
         this.player = player;
         this.message = message;
     }
@@ -18,12 +18,12 @@ public class RawDataRegistryImpl extends DataRegistryImpl implements RawDataRegi
     }
 
     @Override
-    public String getMessage() {
+    public D getData() {
         return message;
     }
 
     @Override
-    public void setMessage(final String message) {
+    public void setData(final D message) {
         this.message = message;
     }
 }

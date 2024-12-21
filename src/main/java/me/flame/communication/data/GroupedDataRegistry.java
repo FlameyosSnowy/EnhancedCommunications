@@ -1,4 +1,4 @@
 package me.flame.communication.data;
 
-public interface GroupedDataRegistry extends MessageDataRegistry, RawGroupedDataRegistry {
+public interface GroupedDataRegistry<D> extends MessageDataRegistry<D>, RawGroupedDataRegistry {
 }

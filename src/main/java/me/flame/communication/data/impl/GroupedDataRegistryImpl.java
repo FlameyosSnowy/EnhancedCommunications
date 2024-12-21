@@ -1,18 +1,19 @@
 package me.flame.communication.data.impl;
 
 import me.flame.communication.data.GroupedDataRegistry;
-import org.bukkit.Bukkit;
+
 import org.bukkit.entity.Player;
+
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
 @SuppressWarnings("unused")
-public class GroupedDataRegistryImpl extends MessageDataRegistryImpl implements GroupedDataRegistry, AutoCloseable {
+public class GroupedDataRegistryImpl<D> extends MessageDataRegistryImpl<D> implements GroupedDataRegistry<D>, AutoCloseable {
     private final Set<Player> players;
 
     public GroupedDataRegistryImpl(final Player player,
-                                   final String serializedMessage,
+                                   final D serializedMessage,
                                    final String[] words, final Set<Player> players) {
         super(player, serializedMessage, words);
         this.players = players == null ? new HashSet<>(words == null ? 3 : words.length) : new HashSet<>(players);

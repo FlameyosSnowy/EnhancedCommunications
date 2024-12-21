@@ -5,6 +5,7 @@ import me.flame.communication.actions.Action;
 
 import me.flame.communication.data.GroupedDataRegistry;
 import me.flame.communication.managers.ActionsManager;
+import me.flame.communication.messages.SerializedMessage;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -33,17 +34,10 @@ public class ActionsManagerImpl implements ActionsManager {
     }
 
     @Override
-    public void executeMentionActions(GroupedDataRegistry dataRegistry) {
+    public void executeMentionActions(GroupedDataRegistry<SerializedMessage> dataRegistry) {
         this.parseActions(EnhancedCommunication.get()
                 .getPrimaryConfig()
                 .getMentionActions(), dataRegistry);
-    }
-
-    @Override
-    public void executeChatCooldownActions(GroupedDataRegistry dataRegistry) {
-        this.parseActions(EnhancedCommunication.get()
-                .getPrimaryConfig()
-                .getChatCooldownsActions(), dataRegistry);
     }
 
     @Override
@@ -59,7 +53,7 @@ public class ActionsManagerImpl implements ActionsManager {
     }
 
     @Override
-    public void parseActions(@NotNull List<String> configuredActions, @NotNull GroupedDataRegistry dataRegistry) {
+    public void parseActions(@NotNull List<String> configuredActions, @NotNull GroupedDataRegistry<?> dataRegistry) {
         List<Action> actions = configuredActions.stream()
                 .map((action) -> {
                     String[] steps = action.split(":");
