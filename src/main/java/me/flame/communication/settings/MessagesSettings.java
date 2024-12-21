@@ -3,6 +3,7 @@ package me.flame.communication.settings;
 import dev.dejvokep.boostedyaml.YamlDocument;
 import dev.dejvokep.boostedyaml.dvs.versioning.BasicVersioning;
 import dev.dejvokep.boostedyaml.settings.updater.UpdaterSettings;
+
 import me.flame.communication.EnhancedCommunication;
 import me.flame.communication.utils.MessageData;
 import me.flame.communication.utils.Reloadable;
@@ -21,7 +22,7 @@ public class MessagesSettings implements Reloadable {
     private final MiniMessage miniMessage = MiniMessage.miniMessage();
 
     private final YamlDocument config;
-    ;
+
     private final Map<String, Object> cachedValues = new ConcurrentHashMap<>(10);
 
     public MessagesSettings() {
@@ -51,6 +52,7 @@ public class MessagesSettings implements Reloadable {
         player.sendMessage(this.miniMessage.deserialize(prefix).append(this.miniMessage.deserialize(this.get(route))));
     }
 
+    @SuppressWarnings("unused")
     public void send(Player player, MessageData route) {
         String prefix = this.get("server.prefix");
         if (!prefix.isEmpty()) prefix += " ";
