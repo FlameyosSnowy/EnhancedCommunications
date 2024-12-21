@@ -1,19 +1,14 @@
 package me.flame.communication.actions.types;
 
-import me.flame.communication.EnhancedCommunication;
 import me.flame.communication.actions.Action;
 import me.flame.communication.data.MessageDataRegistry;
+import me.flame.communication.events.actions.PreSendMessageExecuteEvent;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.minimessage.MiniMessage;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-public record SendMessageAction(Component message) implements Action {
-
-    public SendMessageAction(String message) {
-        this(MINI_MESSAGE.deserialize(message));
-    }
-
+public record SendMessageAction(MessageDataRegistry<Component> dataRegistry) implements Action {
     @Override
     public int expectedArgs() {
         return 1;
@@ -21,6 +16,13 @@ public record SendMessageAction(Component message) implements Action {
 
     @Override
     public void execute(final @NotNull Player involvedPlayer) {
-        involvedPlayer.sendMessage(message);
+        PreSendMessageExecuteEvent event = new PreSendMessageExecuteEvent(!Bukkit.isPrimaryThread(), this, this.dataRegistry);
+        Bukkit.getPluginManager().callEvent(event);
+
+        if (event.isCancelled()) {
+            return;
+        }
+
+        involvedPlayer.sendMessage(dataRegistry.getData());
     }
 }
