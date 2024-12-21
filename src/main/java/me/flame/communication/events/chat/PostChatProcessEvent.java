@@ -1,6 +1,7 @@
 package me.flame.communication.events.chat;
 
 import me.flame.communication.data.RawDataRegistry;
+import me.flame.communication.messages.SerializedMessage;
 import org.bukkit.entity.Player;
 
 import org.bukkit.event.HandlerList;
@@ -10,11 +11,11 @@ import org.jetbrains.annotations.NotNull;
 
 public class PostChatProcessEvent extends PlayerEvent {
     private final String message;
-    private final RawDataRegistry dataRegistry;
+    private final SerializedMessage dataRegistry;
 
     private static final HandlerList HANDLERS = new HandlerList();
 
-    public PostChatProcessEvent(Player player, String message, RawDataRegistry dataRegistry) {
+    public PostChatProcessEvent(Player player, String message, SerializedMessage dataRegistry) {
         super(player);
         this.message = message;
         this.dataRegistry = dataRegistry;
@@ -34,7 +35,7 @@ public class PostChatProcessEvent extends PlayerEvent {
      *
      * @return the raw data registry
      */
-    public RawDataRegistry getDataRegistry() {
+    public SerializedMessage getData() {
         return dataRegistry;
     }
 
