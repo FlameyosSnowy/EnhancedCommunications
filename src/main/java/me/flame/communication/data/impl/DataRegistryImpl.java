@@ -5,6 +5,7 @@ import me.flame.communication.data.DataRegistry;
 import java.util.HashMap;
 import java.util.Map;
 
+@SuppressWarnings("unchecked")
 public class DataRegistryImpl implements DataRegistry {
     private Map<String, Object> registry;
 
