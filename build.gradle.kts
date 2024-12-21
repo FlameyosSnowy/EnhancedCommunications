@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "me.flame.communication"
-version = "1.0.3"
+version = "1.2.0"
 
 repositories {
     mavenCentral()
