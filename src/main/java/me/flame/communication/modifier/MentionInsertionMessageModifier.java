@@ -1,9 +1,9 @@
 package me.flame.communication.modifier;
 
 import me.flame.communication.EnhancedCommunication;
-import me.flame.communication.data.GroupedDataRegistry;
-import me.flame.communication.data.RawDataRegistry;
 import me.flame.communication.managers.MentionsManager;
+import me.flame.communication.messages.SerializedMessage;
+
 import org.jetbrains.annotations.NotNull;
 
 public class MentionInsertionMessageModifier implements MessageModifier {
@@ -13,12 +13,9 @@ public class MentionInsertionMessageModifier implements MessageModifier {
     }
 
     @Override
-    public String modify(final @NotNull RawDataRegistry dataRegistry) {
+    public void modify(final @NotNull SerializedMessage data) {
         MentionsManager mentionsManager = EnhancedCommunication.get().getChatManager().getMentionsManager();
 
-        String message = dataRegistry.getMessage();
-        return mentionsManager.changeMentionsLook(dataRegistry.getPlayer(), message)
-                .map(GroupedDataRegistry::getMessage)
-                .orElseGet(message);
+        mentionsManager.changeMentionsLook(data.getSender(), data);
     }
 }

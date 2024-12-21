@@ -7,51 +7,71 @@ import me.flame.communication.data.MessageDataRegistry;
 
 import me.flame.communication.managers.ActionsManager;
 import me.flame.communication.managers.MentionsManager;
+import me.flame.communication.messages.SerializedMessage;
 import me.flame.communication.settings.PrimarySettings;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import panda.std.Option;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class MentionsManagerImpl implements MentionsManager {
     private final PrimarySettings settings = EnhancedCommunication.get().getPrimaryConfig();
 
-    private static final Pattern USERNAME_PATTERN = Pattern.compile("[a-zA-Z0-9_]+"); // Adjust as needed
+    private static final Pattern USERNAME_PATTERN = Pattern.compile("[a-zA-Z0-9_]+");
+    private static final Pattern EXCLUDED_SYMBOLS = Pattern.compile("([^\\w_]+)?(\\w+)([^\\w_]+)?");
 
     @Override
-    public Option<GroupedDataRegistry> changeMentionsLook(final Player player, final String message) {
-        if (!this.settings.isMentionsEnabled()) return Option.none();
+    public void changeMentionsLook(final Player player, final SerializedMessage data) {
+        if (!this.settings.isMentionsEnabled()) return;
 
+        String message = data.getMessage();
         ActionsManager actionsManager = EnhancedCommunication.get().getChatManager().getActionsManager();
 
-        StringBuilder currentToken = new StringBuilder(8);
-        StringBuilder newMessage = new StringBuilder(message.length());
         Set<Player> players = new HashSet<>();
 
-        int length = message.length();
-        for (int index = 0; index < length; index++) {
-            char c = message.charAt(index);
-            if (Character.isWhitespace(c)) {
-                String processedToken = this.processToken(currentToken.toString(), players);
-                newMessage.append(processedToken).append(' ');
-                currentToken.setLength(0);
-            } else {
-                currentToken.append(c);
-            }
-        }
-
-        String processedToken = this.processToken(currentToken.toString(), players);
-        newMessage.append(processedToken);
-
-        GroupedDataRegistry mentionedUsers = MessageDataRegistry.fromSet(player, newMessage.toString(), null, players);
+        data.setMessage(this.processMessage(message, players));
+        GroupedDataRegistry<SerializedMessage> mentionedUsers = MessageDataRegistry.fromSet(player, data, null, players);
 
         actionsManager.executeMentionActions(mentionedUsers);
-        return Option.of(mentionedUsers);
+    }
+
+    @NotNull
+    private String processMessage(@NotNull final String message, final Set<Player> players) {
+        StringBuilder newMessage = new StringBuilder(message.length());
+        String[] words = message.split("\\s+");
+
+        for (String word : words) {
+            Matcher matcher = EXCLUDED_SYMBOLS.matcher(word);
+
+            if (matcher.matches()) {
+                // Handle prefix
+                if (matcher.group(1) != null) {
+                    newMessage.append(matcher.group(1));
+                }
+
+                // Process username
+                if (matcher.group(2) != null) {
+                    String processedToken = this.processToken(matcher.group(2), players);
+                    newMessage.append(processedToken);
+                }
+
+                // Handle suffix
+                if (matcher.group(3) != null) {
+                    newMessage.append(matcher.group(3));
+                }
+            } else {
+                newMessage.append(word); // Append the word as-is if it doesn't match
+            }
+
+            newMessage.append(' '); // Add space between words
+        }
+
+        return newMessage.toString().trim();
     }
 
     private String processToken(@NotNull String token, Set<Player> mentionedUsers) {
@@ -98,7 +118,7 @@ public class MentionsManagerImpl implements MentionsManager {
             builder.append(symbol);
         }
 
-        builder.append(username);
+        builder.append(username).append(this.settings.getMentionColorEnd());
         return builder.toString();
     }
 }
