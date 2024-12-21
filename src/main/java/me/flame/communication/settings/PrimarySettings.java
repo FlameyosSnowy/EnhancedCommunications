@@ -141,4 +141,8 @@ public class PrimarySettings implements Reloadable {
     public boolean isAutoBroadcastsEnabled() {
         return this.get("enable-broadcasts");
     }
+
+    public String getMentionColorEnd() {
+        return this.get("mentions.mention-color-end");
+    }
 }
