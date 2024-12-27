@@ -30,7 +30,7 @@ public class LoginListener implements Listener {
         Player sender = event.getPlayer();
         this.plugin.getChatManager().getCooldownManager().removeCooldown(sender);
         this.plugin.getConversationManager().getLastMessage(sender.getUniqueId())
-                .peek((messageData) -> {
+                .ifPresent((messageData) -> {
                     Player recipient = Objects.requireNonNull(Bukkit.getPlayer(messageData.recipient()));
                     Messages.sendServer(sender, MessageData.builder("server.recipient-discussion-ended")
                                     .replace("%recipient%", this.miniMessage.serialize(recipient.displayName()))
