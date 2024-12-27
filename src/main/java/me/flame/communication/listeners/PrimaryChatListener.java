@@ -61,7 +61,7 @@ public class PrimaryChatListener implements Listener {
         this.insertCooldownIfAllowed(player);
 
         event.renderer(this.chatManager.getDefaultChatRenderer().createChatRenderer(data));
-        ServerHelper.runDelayed(new PostChatProcess(player, message, data), 1);
+        ServerHelper.runDelayedAsync(new PostChatProcess(player, message, data), 1);
     }
 
     private boolean playerIsOnCooldown(final Player player) {
