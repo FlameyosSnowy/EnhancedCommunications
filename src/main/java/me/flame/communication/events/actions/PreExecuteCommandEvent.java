@@ -9,14 +9,14 @@ import org.bukkit.event.HandlerList;
 
 import org.jetbrains.annotations.NotNull;
 
-public class PreCommandExecuteEvent extends Event implements Cancellable {
+public class PreExecuteCommandEvent extends Event implements Cancellable {
     private static final HandlerList HANDLER_LIST = new HandlerList();
 
     private final ExecuteCommandAction action;
     private final MessageDataRegistry<String> registry;
     private boolean cancelled;
 
-    public PreCommandExecuteEvent(final boolean async, final ExecuteCommandAction action, final MessageDataRegistry<String> registry) {
+    public PreExecuteCommandEvent(final boolean async, final ExecuteCommandAction action, final MessageDataRegistry<String> registry) {
         super(async);
         this.action = action;
         this.registry = registry;
