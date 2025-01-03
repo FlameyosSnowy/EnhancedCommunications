@@ -8,7 +8,6 @@ contributors:
 authors:
   - FlameyosFlow
 website: https://github.com/FlameyosSnowy/EnhancedCommunications
-
 dependencies:
   server:
     PlaceholderAPI:

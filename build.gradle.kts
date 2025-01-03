@@ -21,8 +21,6 @@ dependencies {
     implementation("dev.dejvokep:boosted-yaml:1.3.6")
     implementation("net.kyori:adventure-text-minimessage:4.17.0")
 
-    compileOnly("net.kyori:adventure-api:4.17.0")
-
     implementation("dev.velix:imperat-core:1.5.0")
     implementation("dev.velix:imperat-bukkit:1.5.0")
 

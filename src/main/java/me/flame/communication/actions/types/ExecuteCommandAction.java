@@ -7,7 +7,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 public record ExecuteCommandAction(MessageDataRegistry<String> dataRegistry) implements Action {
-
     @Override
     public int expectedArgs() {
         return 1;

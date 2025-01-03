@@ -44,7 +44,7 @@ chat-cooldown:
   # Title:
   # TITLE:<Title>:<Subtitle>:<FadeIn>:<FadeOut>:<Stay>
   # The durations are in milliseconds, 1000 milliseconds equals 1 second :D
-  on-chat-cooldown-actions:
+  on-chat-cooldown-actions: # Executes default actions of "BLOCK"
     - "SOUND:UI_BUTTON_CLICK:1:1"
     - "ACTION_BAR:<gray>You are on cooldown!"
 
