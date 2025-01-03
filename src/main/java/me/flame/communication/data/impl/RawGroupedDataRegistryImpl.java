@@ -7,28 +7,10 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
-public class RawGroupedDataRegistryImpl implements RawGroupedDataRegistry {
-    private final Map<String, Object> registry = new HashMap<>();
+public class RawGroupedDataRegistryImpl extends DataRegistryImpl implements RawGroupedDataRegistry {
     private final Set<UUID> players = new HashSet<>();
 
     RawGroupedDataRegistryImpl() {
-    }
-
-    public void addRegistration(String key, Object value) {
-        this.registry.put(key, value);
-    }
-
-    public <E> E getRegistration(String key) {
-        return (E) this.registry.get(key);
-    }
-
-    public <E> E getRegistrationOr(String key, E defaultValue) {
-        E value = (E) this.registry.get(key);
-        return value == null ? defaultValue : value;
-    }
-
-    public int getRegistrationsSize() {
-        return this.registry.size();
     }
 
     public boolean add(@NotNull Player player) {
