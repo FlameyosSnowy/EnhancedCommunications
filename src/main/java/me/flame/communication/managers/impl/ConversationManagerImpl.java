@@ -10,7 +10,6 @@ import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-import panda.std.Option;
 
 import java.util.*;
 
@@ -46,9 +45,10 @@ public class ConversationManagerImpl implements ConversationManager {
     }
 
     @Override
-    public Option<Message> getLastMessage(UUID recipient) {
-        return Option.of(lastMessageMap.get(recipient));
+    public Optional<Message> getLastMessage(UUID recipient) {
+        return Optional.ofNullable(lastMessageMap.get(recipient));
     }
+
 
     @Override
     public ReplySuccess replyToLastMessage(UUID sender, String content) {

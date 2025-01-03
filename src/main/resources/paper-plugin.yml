@@ -1,8 +1,13 @@
 name: EnhancedCommunications
-version: '1.2.0'
+version: '1.2.1'
 main: me.flame.communication.EnhancedCommunication
 description: A next-generation chat plugin for enhancing minecraft chat
-api-version: '1.20.6'
+api-version: '1.19.4'
+contributors:
+  - None
+authors:
+  - FlameyosFlow
+website: https://github.com/FlameyosSnowy/EnhancedCommunications
 
 dependencies:
   server:

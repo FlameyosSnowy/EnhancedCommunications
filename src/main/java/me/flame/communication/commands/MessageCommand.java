@@ -39,7 +39,7 @@ public class MessageCommand {
         }
         this.conversationManager.getLastMessage(uniqueId)
                 .filter((messageData) -> this.settings.isCountingMessageOtherAsConversationEnd())
-                .peek((oldMessageData) -> {
+                .ifPresent((oldMessageData) -> {
                     Player recipient = Objects.requireNonNull(Bukkit.getPlayer(oldMessageData.recipient()));
                     Messages.sendServer(sender, MessageData.builder("server.recipient-discussion-ended")
                             .replace("%recipient%", this.miniMessage.serialize(recipient.displayName()))

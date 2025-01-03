@@ -3,7 +3,6 @@ package me.flame.communication.settings;
 import dev.dejvokep.boostedyaml.YamlDocument;
 import dev.dejvokep.boostedyaml.dvs.versioning.BasicVersioning;
 import dev.dejvokep.boostedyaml.settings.updater.UpdaterSettings;
-
 import me.flame.communication.EnhancedCommunication;
 import me.flame.communication.utils.MessageData;
 import me.flame.communication.utils.Reloadable;

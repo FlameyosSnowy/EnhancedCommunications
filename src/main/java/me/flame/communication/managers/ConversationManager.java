@@ -1,8 +1,8 @@
 package me.flame.communication.managers;
 
 import me.flame.communication.messages.Message;
-import panda.std.Option;
 
+import java.util.Optional;
 import java.util.UUID;
 
 public interface ConversationManager {
@@ -26,7 +26,7 @@ public interface ConversationManager {
      * @param recipient the player to get the last message for
      * @return the last message
      */
-    Option<Message> getLastMessage(UUID recipient);
+    Optional<Message> getLastMessage(UUID recipient);
 
     /**
      * Replies to the last message the sender has sent or received.

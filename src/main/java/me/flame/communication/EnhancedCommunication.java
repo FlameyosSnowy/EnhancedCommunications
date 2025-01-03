@@ -1,6 +1,7 @@
 package me.flame.communication;
 
 import dev.velix.imperat.BukkitImperat;
+
 import me.flame.communication.commands.MessageCommand;
 import me.flame.communication.commands.ReloadCommand;
 import me.flame.communication.commands.ReplyCommand;
@@ -22,6 +23,7 @@ import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@SuppressWarnings("unused")
 public final class EnhancedCommunication extends JavaPlugin {
     private static EnhancedCommunication INSTANCE;
     public static final Logger LOGGER = LoggerFactory.getLogger(EnhancedCommunication.class);
@@ -41,22 +43,23 @@ public final class EnhancedCommunication extends JavaPlugin {
         this.primaryConfig = new PrimarySettings();
         this.messagesConfig = new MessagesSettings();
 
-
         this.chatManager = new ChatManagerImpl(this);
         this.conversationManager = new ConversationManagerImpl();
 
-        this.commandManager = BukkitImperat.create(this);
+        this.commandManager = BukkitImperat.builder(this)
+                .applyBrigadier(true)
+                .commandPrefix("ec")
+                .dependencyResolver(ConversationManager.class, () -> this.conversationManager)
+                .dependencyResolver(ChatManager.class, () -> chatManager)
+                .dependencyResolver(PrimarySettings.class, () -> primaryConfig)
+                .dependencyResolver(MessagesSettings.class, () -> messagesConfig)
+                .build();
 
         if (this.primaryConfig.isMessagingEnabled()) {
             this.commandManager.registerCommand(new MessageCommand());
             this.commandManager.registerCommand(new ReplyCommand());
         }
         this.commandManager.registerCommand(new ReloadCommand());
-
-        this.commandManager.registerDependencyResolver(ConversationManager.class, () -> conversationManager);
-        this.commandManager.registerDependencyResolver(ChatManager.class, () -> chatManager);
-        this.commandManager.registerDependencyResolver(PrimarySettings.class, () -> primaryConfig);
-        this.commandManager.registerDependencyResolver(MessagesSettings.class, () -> messagesConfig);
 
         this.getServer().getPluginManager().registerEvents(new PrimaryChatListener(this), this);
         this.getServer().getPluginManager().registerEvents(new LoginListener(this), this);
