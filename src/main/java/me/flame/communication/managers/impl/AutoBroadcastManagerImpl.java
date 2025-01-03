@@ -2,11 +2,8 @@ package me.flame.communication.managers.impl;
 
 import dev.dejvokep.boostedyaml.YamlDocument;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
-
 import dev.dejvokep.boostedyaml.dvs.versioning.BasicVersioning;
-
 import dev.dejvokep.boostedyaml.settings.updater.UpdaterSettings;
-
 import me.flame.communication.EnhancedCommunication;
 import me.flame.communication.broadcasts.BroadcastTask;
 import me.flame.communication.broadcasts.BroadcastViewers;
@@ -24,12 +21,11 @@ import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ScheduledFuture;
 
+
 public class AutoBroadcastManagerImpl implements AutoBroadcastManager {
     private final YamlDocument config;
 
     private final Map<String, BroadcastTask> broadcasts = new HashMap<>(5);
-
-    private boolean enabled;
 
     public AutoBroadcastManagerImpl() {
         try {
@@ -43,8 +39,20 @@ public class AutoBroadcastManagerImpl implements AutoBroadcastManager {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        this.enabled = EnhancedCommunication.get().getPrimaryConfig().isAutoBroadcastsEnabled();
-        if (this.enabled) this.addBroadcasts();
+    }
+
+    @Override
+    public void broadcast(@NotNull final Broadcast broadcast) {
+        BroadcastViewers viewers = broadcast.getViewers();
+        PreBroadcastAnnounceEvent event = new PreBroadcastAnnounceEvent(!Bukkit.isPrimaryThread(), viewers, broadcast);
+        Bukkit.getPluginManager().callEvent(event);
+
+        if (event.isCancelled()) return;
+        if (viewers.isGlobal()) {
+            Bukkit.broadcast(broadcast.getLore());
+            return;
+        }
+        for (World world : viewers.getWorlds()) world.sendMessage(broadcast.getLore());
     }
 
     @Override
@@ -66,20 +74,6 @@ public class AutoBroadcastManagerImpl implements AutoBroadcastManager {
     }
 
     @Override
-    public void broadcast(@NotNull final Broadcast broadcast) {
-        BroadcastViewers viewers = broadcast.getViewers();
-        PreBroadcastAnnounceEvent event = new PreBroadcastAnnounceEvent(!Bukkit.isPrimaryThread(), viewers, broadcast);
-        Bukkit.getPluginManager().callEvent(event);
-
-        if (event.isCancelled()) return;
-        if (viewers.isGlobal()) {
-            Bukkit.broadcast(broadcast.getLore());
-            return;
-        }
-        for (World world : viewers.getWorlds()) world.sendMessage(broadcast.getLore());
-    }
-
-    @Override
     public Section getSection(final String broadcastSection) {
         return this.config.getSection(broadcastSection);
     }
@@ -92,16 +86,14 @@ public class AutoBroadcastManagerImpl implements AutoBroadcastManager {
             throw new RuntimeException(e);
         }
 
-        boolean wasEnabled = this.enabled;
-        this.enabled = EnhancedCommunication.get().getPrimaryConfig().isAutoBroadcastsEnabled();
-        this.reloadBroadcasts(wasEnabled);
+        this.reloadBroadcasts(EnhancedCommunication.get().getPrimaryConfig().isAutoBroadcastsEnabled());
     }
 
-    private void reloadBroadcasts(final boolean wasEnabled) {
-        if (this.enabled) {
+    private void reloadBroadcasts(final boolean isEnabled) {
+        if (isEnabled) {
             this.unloadBroadcasts();
             this.addBroadcasts();
-        } else if (wasEnabled) {
+        } else {
             this.unloadBroadcasts();
         }
     }
@@ -112,6 +104,8 @@ public class AutoBroadcastManagerImpl implements AutoBroadcastManager {
     }
 
     private void addBroadcasts() {
-        for (Object broadcast : this.config.getKeys()) this.addAutoBroadcast(Broadcast.create(this, broadcast.toString()));
+        for (Object broadcast : this.config.getKeys()) {
+            this.addAutoBroadcast(Broadcast.create(this, broadcast.toString()));
+        }
     }
 }

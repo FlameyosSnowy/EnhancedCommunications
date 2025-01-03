@@ -8,7 +8,7 @@ import me.flame.communication.utils.Reloadable;
 
 import org.jetbrains.annotations.NotNull;
 
-import static me.flame.communication.EnhancedCommunication.LOGGER;
+import java.util.function.Supplier;
 
 public class ChatManagerImpl implements Reloadable, ChatManager {
     private MentionsManager mentionsManager;
@@ -22,32 +22,15 @@ public class ChatManagerImpl implements Reloadable, ChatManager {
     private ProcessedChatRenderer processedChatRenderer = DefaultChatRenderer::new;
 
     public ChatManagerImpl(@NotNull final EnhancedCommunication communication) {
-        LOGGER.info("Registering mentions manager.");
-        this.mentionsManager = new MentionsManagerImpl();
-        if (!communication.getPrimaryConfig().isMentionsEnabled()) {
-            LOGGER.info("Mentions is not enabled.");
-        }
-
-        LOGGER.info("Registering actions manager.");
+        // Mandatory managers
         this.actionsManager = new ActionsManagerImpl();
-
-        LOGGER.info("Registering actions manager.");
-        this.autoBroadcastManager = new AutoBroadcastManagerImpl();
-
-        this.wordReplacementManager = new WordReplacementManagerImpl();
-
-        LOGGER.info("Registering chat format manager.");
-        this.chatFormatManager = new ChatFormatManagerImpl();
-
-        LOGGER.info("Registering message modification manager.");
         this.messageModifierManager = new MessageModifierManagerImpl();
 
-        LOGGER.info("Registering cooldowns manager.");
-        this.cooldownManager = new ChatCooldownManagerImpl();
-
-        if (!communication.getPrimaryConfig().isChatCooldownsEnabled()) {
-            LOGGER.info("Chat cooldowns are not enabled.");
-        }
+        this.mentionsManager = communication.getPrimaryConfig().isMentionsEnabled() ? new MentionsManagerImpl() : null;
+        this.cooldownManager = communication.getPrimaryConfig().isChatCooldownsEnabled() ? new ChatCooldownManagerImpl() : null;
+        this.chatFormatManager = !communication.getPrimaryConfig().getGroupFormat().isEmpty() ? new ChatFormatManagerImpl() : null;
+        this.wordReplacementManager = !communication.getPrimaryConfig().getWordReplacements().isEmpty() ? new WordReplacementManagerImpl() : null;
+        this.autoBroadcastManager = communication.getPrimaryConfig().isAutoBroadcastsEnabled() ? new AutoBroadcastManagerImpl() : null;
     }
 
     public @NotNull MentionsManager getMentionsManager() {
@@ -133,10 +116,19 @@ public class ChatManagerImpl implements Reloadable, ChatManager {
 
     @Override
     public void reload() {
-        this.cooldownManager.reload();
-        this.chatFormatManager.reload();
-        this.messageModifierManager.reload();
-        this.wordReplacementManager.reload();
-        this.autoBroadcastManager.reload();
+        this.cooldownManager = initializeAndReload(this.cooldownManager, ChatCooldownManagerImpl::new);
+        this.messageModifierManager = initializeAndReload(this.messageModifierManager, MessageModifierManagerImpl::new);
+        this.chatFormatManager = initializeAndReload(this.chatFormatManager, ChatFormatManagerImpl::new);
+        this.wordReplacementManager = initializeAndReload(this.wordReplacementManager, WordReplacementManagerImpl::new);
+        this.autoBroadcastManager = initializeAndReload(this.autoBroadcastManager, AutoBroadcastManagerImpl::new);
+    }
+
+    private <T extends Reloadable> T initializeAndReload(T manager, Supplier<T> initializer) {
+        if (manager == null) {
+            return initializer.get();
+        } else {
+            manager.reload();
+            return manager;
+        }
     }
 }

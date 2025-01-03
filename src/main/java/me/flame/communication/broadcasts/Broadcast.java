@@ -1,13 +1,13 @@
 package me.flame.communication.broadcasts;
 
 import dev.dejvokep.boostedyaml.block.implementation.Section;
-
 import me.flame.communication.managers.AutoBroadcastManager;
 import me.flame.communication.utils.StringUtils;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.JoinConfiguration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.ConfigurationSection;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -22,7 +22,7 @@ public interface Broadcast {
 
     private static BroadcastViewers getViewers(@NotNull final Section broadcast) {
         String worlds = broadcast.getString("in-world");
-        if (worlds.equalsIgnoreCase("global")) {
+        if (Objects.requireNonNull(worlds, "Worlds should not be null").equalsIgnoreCase("global")) {
             return BroadcastViewers.global();
         }
 

@@ -1,7 +1,6 @@
 package me.flame.communication.managers;
 
 import dev.dejvokep.boostedyaml.block.implementation.Section;
-
 import me.flame.communication.broadcasts.Broadcast;
 import me.flame.communication.utils.Reloadable;
 
