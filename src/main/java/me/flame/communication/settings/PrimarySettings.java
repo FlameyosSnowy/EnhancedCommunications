@@ -3,13 +3,11 @@ package me.flame.communication.settings;
 import dev.dejvokep.boostedyaml.YamlDocument;
 import dev.dejvokep.boostedyaml.dvs.versioning.BasicVersioning;
 import dev.dejvokep.boostedyaml.settings.updater.UpdaterSettings;
-
 import me.flame.communication.EnhancedCommunication;
 import me.flame.communication.utils.Reloadable;
 
 import java.io.File;
 import java.io.IOException;
-
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -39,6 +37,7 @@ public class PrimarySettings implements Reloadable {
         }
         this.cachedValues.clear();
     }
+
     public String getGroupFormat() {
         return this.get("chat-format.group-format");
     }
@@ -63,9 +62,7 @@ public class PrimarySettings implements Reloadable {
     public Long getLong(String section) {
         Long cachedValue = (Long) this.cachedValues.get(section);
         if (cachedValue == null) {
-            Long value = config.getLong(section);
-            if (value == null) return null;
-
+            long value = config.getLong(section);
             this.cachedValues.put(section, value);
             return value;
         }
@@ -78,7 +75,7 @@ public class PrimarySettings implements Reloadable {
         List<String> list = (List<String>) this.cachedValues.get(section);
         if (list == null) {
             List<String> value = this.config.getStringList(section);
-            if (value == null) return null;
+            if (value.isEmpty()) return null;
 
             this.cachedValues.put(section, value);
             return value;
