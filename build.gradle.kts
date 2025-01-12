@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "me.flame.communication"
-version = "1.2.0"
+version = "1.2.1"
 
 repositories {
     mavenCentral()
@@ -21,8 +21,8 @@ dependencies {
     implementation("dev.dejvokep:boosted-yaml:1.3.6")
     implementation("net.kyori:adventure-text-minimessage:4.17.0")
 
-    implementation("dev.velix:imperat-core:1.5.0")
-    implementation("dev.velix:imperat-bukkit:1.5.0")
+    implementation("dev.velix:imperat-core:1.5.1")
+    implementation("dev.velix:imperat-bukkit:1.5.1")
 
     compileOnly("me.clip:placeholderapi:2.11.6")
     compileOnly("com.github.MilkBowl:VaultAPI:1.7")
@@ -32,13 +32,11 @@ dependencies {
 }
 
 tasks.shadowJar {
-    relocate("dev.velix.imperat", "me.flame.communications.libs.imperat")
-    relocate("dev.dejvokep.boostedyaml", "me.flame.communications.libs.boostedyaml")
-    relocate("net.kyori.adventure.text.minimessage", "me.flame.communications.libs.minimessage")
     archiveClassifier.set("")
 }
 
-java.toolchain.languageVersion.set(JavaLanguageVersion.of(21))
+
+java.toolchain.languageVersion.set(JavaLanguageVersion.of(17))
 
 val sourcesJar = tasks.register<Jar>("sourcesJar") {
     archiveClassifier.set("sources")
