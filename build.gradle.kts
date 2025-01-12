@@ -35,7 +35,6 @@ tasks.shadowJar {
     archiveClassifier.set("")
 }
 
-
 java.toolchain.languageVersion.set(JavaLanguageVersion.of(17))
 
 val sourcesJar = tasks.register<Jar>("sourcesJar") {
