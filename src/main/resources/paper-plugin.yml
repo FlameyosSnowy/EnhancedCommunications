@@ -3,6 +3,7 @@ version: '{project.version}'
 main: me.flame.communication.EnhancedCommunication
 description: A next-generation chat plugin for enhancing minecraft chat
 api-version: '1.19.4'
+
 contributors:
   - None
 authors:
