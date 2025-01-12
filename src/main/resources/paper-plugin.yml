@@ -1,5 +1,5 @@
 name: EnhancedCommunications
-version: '1.2.1'
+version: '{project.version}'
 main: me.flame.communication.EnhancedCommunication
 description: A next-generation chat plugin for enhancing minecraft chat
 api-version: '1.19.4'
