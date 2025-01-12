@@ -1,6 +1,7 @@
 package me.flame.communication.events.conversation;
 
 import me.flame.communication.messages.Message;
+import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.Contract;
