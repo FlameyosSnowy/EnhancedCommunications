@@ -14,6 +14,8 @@ server:
 
   cannot-message-self: "<red>You cannot message yourself!"
 
+  message-filtered: "<red>This message was filtered by the server!"
+
 # Messages sent to the person configurating this
 developer:
   prefix: "[EnhancedCommunications]"

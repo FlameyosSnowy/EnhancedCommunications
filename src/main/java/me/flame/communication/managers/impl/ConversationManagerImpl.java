@@ -9,6 +9,8 @@ import me.flame.communication.messages.Message;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Cancellable;
+import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -18,10 +20,10 @@ public class ConversationManagerImpl implements ConversationManager {
     private final MiniMessage miniMessage = MiniMessage.miniMessage();
 
     @Override
-    public void sendMessage(@NotNull Message message) {
-        if (!lastMessageMap.containsKey(message.recipient())) {
-            Bukkit.getPluginManager().callEvent(new ConversationStartEvent(message));
-        }
+    public ReplySuccess sendMessage(@NotNull Message message) {
+        boolean cancelled = this.executeEventsAndCheckCancelled(message);
+        if (cancelled) return ReplySuccess.CANCELLED;
+
         lastMessageMap.put(message.recipient(), message);
 
         Player sender = Bukkit.getPlayer(message.sender());
@@ -42,6 +44,20 @@ public class ConversationManagerImpl implements ConversationManager {
                         .replace("%recipient%", this.miniMessage.serialize(recipient.displayName()))
                         .replace("%message%", message.content())
         ));
+        return ReplySuccess.FOUND;
+    }
+
+    private boolean executeEventsAndCheckCancelled(final @NotNull Message message) {
+        if (!lastMessageMap.containsKey(message.recipient())) {
+            return callEvent(new ConversationStartEvent(message));
+        } else {
+            return callEvent(new ConversationReplyEvent(message));
+        }
+    }
+
+    private static <T extends Event & Cancellable> boolean callEvent(final @NotNull T event) {
+        Bukkit.getPluginManager().callEvent(event);
+        return event.isCancelled();
     }
 
     @Override
@@ -57,7 +73,6 @@ public class ConversationManagerImpl implements ConversationManager {
 
         Message messageData = new Message(sender, lastMessage.sender(), content);
         this.sendMessage(messageData);
-        Bukkit.getPluginManager().callEvent(new ConversationReplyEvent(messageData));
         return ReplySuccess.FOUND;
     }
 }

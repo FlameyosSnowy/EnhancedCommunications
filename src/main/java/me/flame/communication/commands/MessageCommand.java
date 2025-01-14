@@ -4,6 +4,7 @@ import dev.velix.imperat.annotations.*;
 
 import me.flame.communication.events.conversation.ConversationEndEvent;
 import me.flame.communication.managers.ConversationManager;
+import me.flame.communication.managers.ReplySuccess;
 import me.flame.communication.messages.Message;
 import me.flame.communication.settings.PrimarySettings;
 import me.flame.communication.utils.MessageData;
@@ -14,6 +15,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 
 @Command(value = { "msg", "message", "w", "whisper" })
@@ -37,8 +39,18 @@ public class MessageCommand {
         if (uniqueId.equals(targetUniqueId)) {
             Messages.sendServer(sender, "server.cannot-message-self");
         }
-        this.conversationManager.getLastMessage(uniqueId)
-                .filter((messageData) -> this.settings.isCountingMessageOtherAsConversationEnd())
+
+        Optional<Message> lastMessage = conversationManager.getLastMessage(targetUniqueId);
+
+        Message messageData = new Message(uniqueId, targetUniqueId, message);
+        ReplySuccess success = conversationManager.sendMessage(messageData);
+        if (success == ReplySuccess.CANCELLED) {
+            Messages.sendServer(sender, "server.message-filtered");
+            return;
+        }
+
+        lastMessage
+                .filter((data) -> this.settings.isCountingMessageOtherAsConversationEnd())
                 .ifPresent((oldMessageData) -> {
                     Player recipient = Objects.requireNonNull(Bukkit.getPlayer(oldMessageData.recipient()));
                     Messages.sendServer(sender, MessageData.builder("server.recipient-discussion-ended")
@@ -46,9 +58,5 @@ public class MessageCommand {
                             .build());
                     Bukkit.getPluginManager().callEvent(new ConversationEndEvent(oldMessageData));
                 });
-
-
-        Message messageData = new Message(uniqueId, targetUniqueId, message);
-        conversationManager.sendMessage(messageData);
     }
 }

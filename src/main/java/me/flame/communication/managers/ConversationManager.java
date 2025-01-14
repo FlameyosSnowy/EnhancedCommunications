@@ -16,7 +16,7 @@ public interface ConversationManager {
      *
      * @param message the message
      */
-    void sendMessage(Message message);
+    ReplySuccess sendMessage(Message message);
 
     /**
      * Returns the last message a player has sent or received.
