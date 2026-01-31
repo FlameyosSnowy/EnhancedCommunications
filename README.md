@@ -39,7 +39,7 @@ Maven:
     <dependency>
         <groupId>me.flame.communication</groupId>
         <artifactId>EnhancedCommunication</artifactId>
-        <version>1.0.1</version>
+        <version>1.2.1</version>
     </dependency>
 </dependencies>
 ```
@@ -54,7 +54,7 @@ repositories {
 }
 
 dependencies {
-    implementation("me.flame.communication:EnhancedCommunication:1.2.0")
+    implementation("me.flame.communication:EnhancedCommunication:1.2.1")
 }
 ```
 
