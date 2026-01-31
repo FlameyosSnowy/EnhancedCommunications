@@ -54,7 +54,7 @@ repositories {
 }
 
 dependencies {
-    implementation("me.flame.communication:EnhancedCommunication:1.0.1")
+    implementation("me.flame.communication:EnhancedCommunication:1.2.0")
 }
 ```
 
