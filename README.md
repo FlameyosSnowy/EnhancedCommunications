@@ -78,6 +78,4 @@ dependencies {
 }
 ```
 
-You can ask for help in my [discord server](https://discord.gg/Zj6KBS7UwX)
-
 **ChannelsCommunication** and **EnhancedChatModeration** will soon join the party.
